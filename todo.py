@@ -10,6 +10,9 @@ from datetime import datetime, timedelta
 PICKLE_FILE = os.path.expanduser("~/.todo.pickle")
 
 def age_in_days(created):
+    '''
+    calculated age
+    '''
     age = datetime.now() - created
     return f'{age.days}d'
 
@@ -88,6 +91,9 @@ class Tasks:
 
     # Complete the rest of the methods, change the method definitions as needed
     def add(self, name, due=None, priority=1):
+        '''
+        Add a new task by using the --add command
+        '''
         due_date = parse_due_date(due) if due else None
         task = Task(name, priority, due_date)
         self.tasks.append(task)
@@ -95,6 +101,9 @@ class Tasks:
         print(f"Created task {task.id}")
 
     def list(self):
+        '''
+        Use the --list command to display a list of the not completed tasks sorted by the due date. If tasks have the same due date, sort by decreasing priority (1 is the highest priority). If tasks have no due date, then sort by decreasing priority.
+        '''
         active_tasks = [t for t in self.tasks if not t.is_done()]
         active_tasks.sort(key=lambda t: (t.due_date or datetime.max, -t.priority))
         print(f"{'ID':<40} {'Age':<5} {'Due':<12} {'Priority':<8} Task")
@@ -105,6 +114,9 @@ class Tasks:
             print(f"{t.id:<40} {age_str:<5} {due_str:<12} {t.priority:<8} {t.name}")
 
     def report(self):
+        '''
+        List all tasks, including both completed and incomplete tasks, using the report command.
+        '''
         all_tasks = sorted(self.tasks, key=lambda t: (t.due_date or datetime.max, -t.priority))
         print(f"{'ID':<40} {'Age':<5} {'Due':<12} {'Priority':<8} {'Task':<25} {'Created':<25} Completed")
         print("-" * 110)
@@ -116,6 +128,9 @@ class Tasks:
             print(f"{t.id:<40} {age_str:<5} {due_str:<12} {t.priority:<8} {t.name:<25} {created_str:<25} {completed_str}")
 
     def done(self, task_id):
+        '''
+        Complete a task by passing the done argument and the unique identifier.
+        '''
         task_id = int(task_id)
         task = next((t for t in self.tasks if t.id == task_id), None)
         if task:
@@ -126,6 +141,9 @@ class Tasks:
             print("Task not found.")
 
     def delete(self, task_id):
+        '''
+        Delete a task by passing the --delete command and the unique identifier.
+        '''
         task_id = int(task_id)
         original_len = len(self.tasks)
         self.tasks = [t for t in self.tasks if not t.id == task_id]
@@ -136,6 +154,9 @@ class Tasks:
             print("Task not found.")
 
     def query(self, terms):
+        '''
+        Search for tasks that match a search term using the --query command. Only return tasks are not completed in your results.
+        '''
         matches = [t for t in self.tasks if not t.is_done() and any(term.lower() in t.name.lower() for term in terms)]
         matches.sort(key=lambda t: (t.due_date or datetime.max, -t.priority))
         print(f"{'ID':<40} {'Age':<5} {'Due':<12} {'Priority':<8} Task")
