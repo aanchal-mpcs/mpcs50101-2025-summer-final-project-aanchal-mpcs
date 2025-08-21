@@ -173,7 +173,6 @@ def main():
     parser.add_argument('--add', type=str, help='Task description')
     parser.add_argument('--due', type=str, help='Due date (MM/DD/YYYY, weekday, or tomorrow)')
     parser.add_argument('--priority', type=int, choices=[1,2,3], default=1, help='Priority 1=low, 3=high')
-
     parser.add_argument('--list', action='store_true', help='List incomplete tasks')
     parser.add_argument('--report', action='store_true', help='Show all tasks')
     parser.add_argument('--done', type=str, help='Mark task done by ID prefix')
